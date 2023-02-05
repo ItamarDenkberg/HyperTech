@@ -1,0 +1,32 @@
+modLoader="javafml"
+loaderVersion="[44,)"
+license="MIT License"
+
+[[mods]]
+    modId="hypertech"
+    version="0.0.1"
+    displayName="HyperTech"
+    #updateJSONURL="https://change.me.example.invalid/updates.json"
+    #displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
+    #logoFile="hypertech.png"
+    #credits="Thanks for this example mod goes to Java"
+    # A text field displayed in the mod UI
+    authors="Itamar Denkberg"
+    displayTest="MATCH_VERSION"
+    description='''
+
+    '''
+
+[[dependencies.hypertech]]
+    modId="forge"
+    mandatory=true
+    versionRange="[44,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.hypertech]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.3,1.20)"
+    ordering="NONE"
+    side="BOTH"
