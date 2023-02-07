@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+    }
+    dependencies {
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+
 plugins {
     id 'eclipse'
     id 'maven-publish'
@@ -88,7 +97,11 @@ repositories {
 }
 
 dependencies {
+	// Forge
     minecraft 'net.minecraftforge:forge:1.19.3-44.1.16'
+    
+    // SpongePowered
+    annotationProcessor 'org.spongepowered:mixin:0.8.3:processor'
 }
 
 jar {
@@ -122,4 +135,10 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+apply plugin: 'org.spongepowered.mixin'
+
+mixin {
+    add sourceSets.main, "${archivesBaseName}.refmap.json"
 }
