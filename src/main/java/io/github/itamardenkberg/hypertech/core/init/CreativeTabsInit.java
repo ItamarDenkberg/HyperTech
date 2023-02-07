@@ -19,5 +19,11 @@ public class CreativeTabsInit {
 				output.accept(ItemInit.ALUMINIUM_INGOT.get());
 				output.accept(ItemInit.ALUMINIUM_DUST.get());
 				output.accept(ItemInit.ALUMINIUM_NUGGET.get());
+				output.accept(ItemInit.COPPER_DUST.get());
+				output.accept(ItemInit.GOLD_DUST.get());
+				output.accept(ItemInit.IRON_DUST.get());
+				output.accept(ItemInit.DIAMOND_DUST.get());
+				output.accept(ItemInit.NETHERITE_DUST.get());
+				output.accept(ItemInit.COPPER_GENERATOR.get());
 			}).build();
 }

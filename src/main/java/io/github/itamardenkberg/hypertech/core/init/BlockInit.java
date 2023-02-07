@@ -1,6 +1,7 @@
 package io.github.itamardenkberg.hypertech.core.init;
 
 import io.github.itamardenkberg.hypertech.HyperTech;
+import io.github.itamardenkberg.hypertech.common.blocks.CopperGeneratorBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -23,4 +24,10 @@ public class BlockInit {
 
 	public static final RegistryObject<Block> ALUMINIUM_BLOCK = BLOCKS.register("aluminium_block",
 			() -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+
+	public static final RegistryObject<Block> COPPER_GENERATOR = BLOCKS.register("copper_generator",
+			() -> new CopperGeneratorBlock(BlockBehaviour.Properties.copy(ALUMINIUM_BLOCK.get())));
+
+//	public static final RegistryObject<Block> GOLD_GENERATOR = BLOCKS.register("gold_generator",
+//			() -> new GeneratorBlock(BlockBehaviour.Properties.copy(ALUMINIUM_BLOCK.get())));
 }

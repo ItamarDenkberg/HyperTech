@@ -1,0 +1,24 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"iii",
+		"DRD",
+		"iii"
+	],
+	"key": {
+		"i": {
+			"tag": "forge:ingots/aluminium"
+		},
+		"D": {
+			"tag": "forge:dusts/copper"
+		},
+		"R": {
+			"item": "minecraft:redstone_block"
+		}
+	},
+	"result": {
+		"item": "hypertech:copper_generator",
+		"count": 1
+	},
+	"group": "generators"
+}

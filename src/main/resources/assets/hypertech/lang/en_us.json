@@ -7,5 +7,8 @@
 	"block.hypertech.bauxite_ore": "Bauxite Ore",
 	"block.hypertech.deepslate_bauxite_ore": "Deepslate Bauxite Ore",
 	"block.hypertech.raw_bauxite_block": "Raw Bauxite Block",
-	"block.hypertech.aluminium_block": "Aluminum Block"
+	"block.hypertech.aluminium_block": "Aluminum Block",
+	"block.hypertech.copper_generator": "Copper Generator",
+	"blockentity.hypertech.copper_generator": "Copper Generator",
+	"itemGroup.hypertech_main": "HyperTech"
 }

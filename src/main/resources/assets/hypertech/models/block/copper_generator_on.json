@@ -1,0 +1,8 @@
+{
+	"parent": "minecraft:block/orientable",
+	"textures": {
+		"front": "hypertech:block/copper_generator_front_on",
+		"side": "hypertech:block/copper_generator_side_on",
+		"top": "hypertech:block/generator_top_on"
+	}
+}

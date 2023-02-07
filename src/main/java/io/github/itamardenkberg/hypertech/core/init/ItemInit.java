@@ -24,6 +24,21 @@ public class ItemInit {
 
 	public static final RegistryObject<Item> ALUMINIUM_DUST = ITEMS.register("aluminium_dust",
 			() -> new Item(new Item.Properties()));
+	
+	public static final RegistryObject<Item> COPPER_DUST = ITEMS.register("copper_dust",
+			() -> new Item(new Item.Properties()));
+	
+	public static final RegistryObject<Item> GOLD_DUST = ITEMS.register("gold_dust",
+			() -> new Item(new Item.Properties()));
+	
+	public static final RegistryObject<Item> IRON_DUST = ITEMS.register("iron_dust",
+			() -> new Item(new Item.Properties()));
+	
+	public static final RegistryObject<Item> DIAMOND_DUST = ITEMS.register("diamond_dust",
+			() -> new Item(new Item.Properties()));
+	
+	public static final RegistryObject<Item> NETHERITE_DUST = ITEMS.register("netherite_dust",
+			() -> new Item(new Item.Properties()));
 
 	// Blocks
 
@@ -38,4 +53,10 @@ public class ItemInit {
 
 	public static final RegistryObject<BlockItem> ALUMINIUM_BLOCK = ITEMS.register("aluminium_block",
 			() -> new BlockItem(BlockInit.ALUMINIUM_BLOCK.get(), new Item.Properties()));
+
+	public static final RegistryObject<BlockItem> COPPER_GENERATOR = ITEMS.register("copper_generator",
+			() -> new BlockItem(BlockInit.COPPER_GENERATOR.get(), new Item.Properties()));
+
+//	public static final RegistryObject<BlockItem> GOLD_GENERATOR = ITEMS.register("gold_generator",
+//			() -> new BlockItem(BlockInit.GOLD_GENERATOR.get(), new Item.Properties()));
 }
