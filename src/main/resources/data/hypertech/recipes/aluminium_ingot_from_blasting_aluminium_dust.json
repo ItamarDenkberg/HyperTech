@@ -3,7 +3,7 @@
     "ingredient": {
         "tag": "forge:dusts/aluminium"
     },
-    "result": "hypertech:aluminium",
+    "result": "hypertech:aluminium_ingot",
     "experience": 0.7,
     "cookingtime": 100,
     "group": "aluminium_ingot"
