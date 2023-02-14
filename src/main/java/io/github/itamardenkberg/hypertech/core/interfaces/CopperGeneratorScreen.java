@@ -1,9 +1,12 @@
 package io.github.itamardenkberg.hypertech.core.interfaces;
 
+import java.util.Optional;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import io.github.itamardenkberg.hypertech.HyperTech;
+import io.github.itamardenkberg.hypertech.core.util.MouseUtil;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -33,6 +36,7 @@ public class CopperGeneratorScreen extends AbstractContainerScreen<CopperGenerat
 
 		this.blit(stack, x, y, 0, 0, imageWidth, imageHeight);
 		renderProgress(stack, x, y);
+		renderEnergy(stack, x, y);
 	}
 
 	private void renderProgress(PoseStack stack, int x, int y) {
@@ -41,10 +45,33 @@ public class CopperGeneratorScreen extends AbstractContainerScreen<CopperGenerat
 		}
 	}
 
+	private void renderEnergy(PoseStack stack, int x, int y) {
+		blit(stack, x + 113, y + 75, 176, 82, 18, menu.getScaledEnergy() + 1);
+	}
+
+	@Override
+	protected void renderLabels(PoseStack stack, int mouseX, int mouseY) {
+		int x = (width - imageWidth) / 2;
+		int y = (height - imageHeight) / 2;
+
+		renderEnergyAreaTooltips(stack, mouseX, mouseY, x, y);
+	}
+
+	private void renderEnergyAreaTooltips(PoseStack stack, int mouseX, int mouseY, int x, int y) {
+		if (isMouseAboveArea(mouseX, mouseY, x, y, 113, 10, 18, 66)) {
+			renderTooltip(stack, menu.getTooltips(), Optional.empty(), mouseX - x, mouseY - y);
+		}
+	}
+
 	@Override
 	public void render(PoseStack stack, int mouseX, int mouseY, float delta) {
 		renderBackground(stack);
 		super.render(stack, mouseX, mouseY, delta);
 		renderTooltip(stack, mouseX, mouseY);
+	}
+
+	private boolean isMouseAboveArea(int mouseX, int mouseY, int x, int y, int offsetX, int offsetY, int width,
+			int height) {
+		return MouseUtil.isMouseOver(mouseX, mouseY, x + offsetX, y + offsetY, width, height);
 	}
 }

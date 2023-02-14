@@ -1,4 +1,4 @@
-package io.github.itamardenkberg.hypertech.core.util.enums;
+package io.github.itamardenkberg.hypertech.core.util;
 
 import net.minecraftforge.energy.EnergyStorage;
 

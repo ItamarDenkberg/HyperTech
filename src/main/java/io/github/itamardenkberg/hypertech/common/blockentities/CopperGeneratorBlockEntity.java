@@ -1,13 +1,18 @@
 package io.github.itamardenkberg.hypertech.common.blockentities;
 
+import java.util.Optional;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import io.github.itamardenkberg.hypertech.HyperTech;
+import io.github.itamardenkberg.hypertech.common.blocks.CopperGeneratorBlock;
+import io.github.itamardenkberg.hypertech.common.recipes.EnergyGenerationRecipe;
 import io.github.itamardenkberg.hypertech.core.init.BlockEntitiesInit;
-import io.github.itamardenkberg.hypertech.core.init.ItemInit;
+import io.github.itamardenkberg.hypertech.core.init.MessagesInit;
 import io.github.itamardenkberg.hypertech.core.interfaces.CopperGeneratorMenu;
-import io.github.itamardenkberg.hypertech.core.util.enums.EnergyStorageUtil;
+import io.github.itamardenkberg.hypertech.core.networking.packet.EnergySyncS2CPacket;
+import io.github.itamardenkberg.hypertech.core.util.EnergyStorageUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,7 +24,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,13 +37,15 @@ import net.minecraftforge.items.ItemStackHandler;
 public class CopperGeneratorBlockEntity extends BlockEntity implements MenuProvider {
 	private int progress = 0;
 	private int maxProgress = 60;
+	private static final int MAX_ENERGY = 20000;
 	protected final ContainerData data;
 
-	private final EnergyStorageUtil ENERGY_STORAGE = new EnergyStorageUtil(20000, 256) {
+	private final EnergyStorageUtil ENERGY_STORAGE = new EnergyStorageUtil(MAX_ENERGY, 256) {
 
 		@Override
 		public void onEnergyChanged() {
 			setChanged();
+			MessagesInit.sendToClients(new EnergySyncS2CPacket(this.energy, getBlockPos()));
 		}
 	};
 
@@ -123,6 +129,18 @@ public class CopperGeneratorBlockEntity extends BlockEntity implements MenuProvi
 		progress = nbt.getInt("copper_generator.progress");
 	}
 
+	public IEnergyStorage getEnergyStorage() {
+		return ENERGY_STORAGE;
+	}
+
+	public int getEnergyLevel() {
+		return this.ENERGY_STORAGE.getEnergyStored();
+	}
+
+	public void setEnergyLevel(int energy) {
+		this.ENERGY_STORAGE.setEnergy(energy);
+	}
+
 	@Override
 	public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction side) {
 		if (capability == ForgeCapabilities.ENERGY) {
@@ -154,25 +172,32 @@ public class CopperGeneratorBlockEntity extends BlockEntity implements MenuProvi
 			return;
 		}
 
-		if (hasRecipe(entity)) {
+		if (hasRecipe(entity) && isNotFull(entity)) {
 			entity.progress++;
 			setChanged(world, pos, state);
 
 			if (entity.progress >= entity.maxProgress) {
 				generateFE(entity);
+				System.out.println(entity.getEnergyStorage().getEnergyStored());
 			}
 		} else {
 			entity.resetProgress();
 			setChanged(world, pos, state);
 		}
 
-		if (hasFuel(entity)) {
-			entity.ENERGY_STORAGE.receiveEnergy(64, false);
+		if (entity.ENERGY_STORAGE.getEnergyStored() > 0) {
+			state.setValue(CopperGeneratorBlock.POWERED, true);
+		} else {
+			state.setValue(CopperGeneratorBlock.POWERED, false);
 		}
 	}
 
+	private static boolean isNotFull(CopperGeneratorBlockEntity entity) {
+		return entity.ENERGY_STORAGE.getEnergyStored() < MAX_ENERGY;
+	}
+
 	private static boolean hasFuel(CopperGeneratorBlockEntity entity) {
-		return false;
+		return !entity.itemHandler.getStackInSlot(0).isEmpty();
 	}
 
 	private void resetProgress() {
@@ -180,27 +205,24 @@ public class CopperGeneratorBlockEntity extends BlockEntity implements MenuProvi
 	}
 
 	private static void generateFE(CopperGeneratorBlockEntity entity) {
-		entity.ENERGY_STORAGE.receiveEnergy(100, false);
-		entity.resetProgress();
+		Level world = entity.level;
+		SimpleContainer inventory = new SimpleContainer(entity.itemHandler.getStackInSlot(0));
+
+		Optional<EnergyGenerationRecipe> recipe = world.getRecipeManager()
+				.getRecipeFor(EnergyGenerationRecipe.Type.INSTANCE, inventory, world);
+
+		if (hasRecipe(entity) && hasFuel(entity)) {
+			entity.itemHandler.extractItem(0, 1, false);
+			entity.ENERGY_STORAGE.receiveEnergy(recipe.get().getOutput(), false);
+			entity.resetProgress();
+		}
 	}
 
 	private static boolean hasRecipe(CopperGeneratorBlockEntity entity) {
-		SimpleContainer inventory = new SimpleContainer(entity.itemHandler.getSlots());
-		for (int i = 0; i < entity.itemHandler.getSlots(); i++) {
-			inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
-		}
+		Level world = entity.level;
+		SimpleContainer inventory = new SimpleContainer(entity.itemHandler.getStackInSlot(0));
 
-		boolean hasFuel = entity.itemHandler.getStackInSlot(0).getItem() == ItemInit.ALUMINIUM_DUST.get();
-
-		return hasFuel && canInsertAmount(inventory)
-				&& canInsertItem(inventory, new ItemStack(ItemInit.ALUMINIUM_DUST.get(), 1));
-	}
-
-	private static boolean canInsertItem(SimpleContainer inventory, ItemStack stack) {
-		return inventory.getItem(2).getItem() == stack.getItem() || inventory.getItem(2).isEmpty();
-	}
-
-	private static boolean canInsertAmount(SimpleContainer inventory) {
-		return inventory.getItem(2).getMaxStackSize() > inventory.getItem(2).getCount();
+		return world.getRecipeManager().getRecipeFor(EnergyGenerationRecipe.Type.INSTANCE, inventory, world)
+				.isPresent();
 	}
 }

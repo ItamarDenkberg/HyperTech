@@ -2,6 +2,7 @@ package io.github.itamardenkberg.hypertech.common.blocks;
 
 import io.github.itamardenkberg.hypertech.common.blockentities.CopperGeneratorBlockEntity;
 import io.github.itamardenkberg.hypertech.core.init.BlockEntitiesInit;
+import io.github.itamardenkberg.hypertech.core.init.BlockStatePropertiesInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,7 +25,6 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
@@ -32,7 +32,7 @@ import net.minecraftforge.network.NetworkHooks;
 
 public class CopperGeneratorBlock extends BaseEntityBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
-	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+	public static final BooleanProperty POWERED = BlockStatePropertiesInit.POWERED;
 
 	public CopperGeneratorBlock(Properties properties) {
 		super(properties);

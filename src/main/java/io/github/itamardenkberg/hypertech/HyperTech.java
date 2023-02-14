@@ -8,6 +8,7 @@ import io.github.itamardenkberg.hypertech.core.init.BlockEntitiesInit;
 import io.github.itamardenkberg.hypertech.core.init.BlockInit;
 import io.github.itamardenkberg.hypertech.core.init.ItemInit;
 import io.github.itamardenkberg.hypertech.core.init.MenuTypesInit;
+import io.github.itamardenkberg.hypertech.core.init.RecipesInit;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -24,5 +25,6 @@ public class HyperTech {
 		BlockInit.BLOCKS.register(bus);
 		BlockEntitiesInit.BLOCK_ENTITIES.register(bus);
 		MenuTypesInit.MENU_TYPES.register(bus);
+		RecipesInit.RECIPE_SERIALIZERS.register(bus);
 	}
 }

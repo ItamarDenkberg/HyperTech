@@ -15,5 +15,6 @@
 	"block.hypertech.aluminium_block": "Aluminium Block",
 	"block.hypertech.copper_generator": "Copper Generator",
 	"blockentity.hypertech.copper_generator": "Copper Generator",
-	"item_group.hypertech.main": "HyperTech"
+	"item_group.hypertech.main": "HyperTech",
+	"jei.title.hypertech.energy_generation": "Energy Generation"
 }

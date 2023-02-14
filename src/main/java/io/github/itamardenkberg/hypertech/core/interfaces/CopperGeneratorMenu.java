@@ -1,9 +1,12 @@
 package io.github.itamardenkberg.hypertech.core.interfaces;
 
+import java.util.List;
+
 import io.github.itamardenkberg.hypertech.common.blockentities.CopperGeneratorBlockEntity;
 import io.github.itamardenkberg.hypertech.core.init.BlockInit;
 import io.github.itamardenkberg.hypertech.core.init.MenuTypesInit;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -53,6 +56,21 @@ public class CopperGeneratorMenu extends AbstractContainerMenu {
 		int progressArrowSize = 24;
 
 		return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
+	}
+
+	public int getScaledEnergy() {
+		int energy = this.entity.getEnergyStorage().getEnergyStored();
+		int maxEnergy = this.entity.getEnergyStorage().getMaxEnergyStored();
+		int energyBarSize = 66;
+
+		System.out.println(this.entity.getEnergyStorage());
+
+		return maxEnergy != 0 && energy != 0 ? energy * energyBarSize / maxEnergy : 0;
+	}
+
+	public List<Component> getTooltips() {
+		return List.of(Component.literal(
+				this.entity.getEnergyLevel() + "/" + this.entity.getEnergyStorage().getMaxEnergyStored() + " FE"));
 	}
 
 	private static final int HOTBAR_SLOT_COUNT = 9;
@@ -116,5 +134,9 @@ public class CopperGeneratorMenu extends AbstractContainerMenu {
 		for (int i = 0; i < 9; ++i) {
 			this.addSlot(new Slot(inventory, i, 8 + i * 18, 142));
 		}
+	}
+
+	public CopperGeneratorBlockEntity getBlockEntity() {
+		return this.entity;
 	}
 }
